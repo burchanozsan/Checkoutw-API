@@ -1,11 +1,11 @@
-import os
-from flask import Flask, render_template, send_from_directory, request, redirect, url_for, abort
+from flask import Flask, render_template, request, redirect, url_for
 import app.main.config as config
 from .main.config import read_config
 from .main.payment_methods import adyen_payment_methods
 from .main.payments import adyen_payments
-from .main.payments_details import get_details
-from .main.payments_finalize import finalize
+from .main.payments_details_3ds2 import get_details
+from .main.payments_finalize_redirect import finalize
+
 
 def create_app():
     app = Flask('app')
@@ -53,18 +53,18 @@ def create_app():
 
     @app.route('/result/success', methods=['GET'])
     def checkout_success():
-        return render_template('checkout-success.html')
+        return render_template('success.html')
 
     @app.route('/result/failed', methods=['GET'])
     def checkout_failure():
-        return render_template('checkout-failed.html')
+        return render_template('failed.html')
 
     @app.route('/result/pending', methods=['GET'])
     def checkout_pending():
-        return render_template('checkout-success.html')
+        return render_template('success.html')
 
     @app.route('/result/error', methods=['GET'])
     def checkout_error():
-        return render_template('checkout-failed.html')
+        return render_template('failed.html')
 
     return app

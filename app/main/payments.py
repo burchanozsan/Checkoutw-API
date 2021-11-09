@@ -33,6 +33,11 @@ def adyen_payments(frontend_request):
 
     if payment_type == 'scheme':
         payments_request['additionalData'] = {'allow3DS2': 'true', 'executeThreeD': 'true'}
+        payments_request['billingAddress'] = {'country': 'US','city': 'New York','street': 'Redwood Block',
+                                            'houseNumberOrName': '37C','stateOrProvince': 'NY', 'postalCode': '10039'}
+        payments_request['shopperEmail'] = 'burchanozsan@shopper.com'
+        payments_request['shopperIP'] = '192.0.2.1'
+        payments_request['accountInfo'] = {'accountCreationDate' : '2019-01-17T13:42:40+01:00'}
 
     elif payment_type == 'alipay':
         payments_request['countryCode'] = 'CN'
@@ -45,7 +50,7 @@ def adyen_payments(frontend_request):
         payments_request['countryCode'] = 'NL'
 
     print("/payments request:\n" + str(payments_request))
-    result = requests.post(URL, headers=HEADERS, json=payments_request)
-    data = json.dumps(result.json())
-    print("/payments response:\n" + data)
-    return data
+    response = requests.post(URL, headers=HEADERS, json=payments_request)
+    formatted_response = json.dumps(response.json())
+    print("/payments response:\n" + formatted_response)
+    return formatted_response

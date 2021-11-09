@@ -8,8 +8,10 @@ HEADERS = {
 
 def finalize(redirect_result):
     details_request = redirect_result
-    print("!!!!!!!!!!payment_finalize!!!!!!!!!")
+    print("finalize method")
     print("/payments/details request:\n" + str(details_request))
-    result = requests.post(URL, headers=HEADERS, json=details_request)
-    data = json.loads(json.dumps(result.json()))
-    return data
+    response = requests.post(URL, headers=HEADERS, json=details_request)
+    formatted_response = json.loads(json.dumps(response.json()))
+    print("/payments/details response:\n" + json.dumps(response.json()))
+
+    return formatted_response

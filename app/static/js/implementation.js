@@ -1,17 +1,15 @@
 const clientKey = JSON.parse(document.getElementById('client-key').innerHTML);
 
 
-async function initCheckout() {
+async function checkout() {
 	try {
 		const paymentMethodsResponse = await callServer("/api/getPaymentMethods", {});
-		console.log("I'm HERE!!!")
         const configuration = {
          paymentMethodsResponse: paymentMethodsResponse, // The `/paymentMethods` response from the server.
-         clientKey: clientKey, // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.
+         clientKey: clientKey,
          locale: "en-US",
          environment: "test",
          onSubmit: (state, dropin) => {
-         console.log("onSubmit")
 
              // Global configuration for onSubmit
              // Your function calling your server to make the `/payments` request
@@ -30,7 +28,6 @@ async function initCheckout() {
                });
            },
          onAdditionalDetails: (state, dropin) => {
-         console.log("onAdditionalDetails")
            // Your function calling your server to make a `/payments/details` request
            handleSubmission(state, dropin, "/api/submitAdditionalDetails");
              then(response => {
@@ -53,18 +50,14 @@ async function initCheckout() {
              enableStoreDetails: true,
              hideCVC: false, // Change this to true to hide the CVC field for stored cards
              name: 'Credit or debit card',
-//             onSubmit: () => {}, // onSubmit configuration for card payments. Overrides the global configuration.
            }
          }
         };
 
-		console.log("before const checkout")
 		const checkout = await AdyenCheckout(configuration);
-		console.log("after const checkout")
 		const dropin = checkout
 
           .create('dropin', {
-          // Starting from version 4.0.0, Drop-in configuration only accepts props related to itself and cannot contain generic configuration like the onSubmit event.
               openFirstPaymentMethod:false
           })
          .mount('#dropin-container');
@@ -76,8 +69,7 @@ async function initCheckout() {
 }
 
 
-// Event handlers called when the shopper selects the pay button,
-// or when additional information is required to complete the payment
+
 async function handleSubmission(state, dropin, url) {
 console.log("handleSubmission")
 	try {
@@ -89,7 +81,6 @@ console.log("handleSubmission")
 	}
 }
 
-// Calls your server endpoints
 async function callServer(url, data) {
 console.log("callServer" +url +data)
 	const res = await fetch(url, {
@@ -103,9 +94,7 @@ console.log("callServer" +url +data)
 	return await res.json();
 }
 
-// Handles responses sent from your server to the client
 function handleServerResponse(res, dropin) {
-    console.log("handleServerResponse")
 	if (res.action) {
 		dropin.handleAction(res.action);
 	} else {
@@ -127,4 +116,4 @@ function handleServerResponse(res, dropin) {
 	}
 }
 
-initCheckout();
+checkout();

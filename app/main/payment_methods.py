@@ -1,4 +1,3 @@
-import app.main.config as config
 import json
 import requests
 
@@ -9,10 +8,11 @@ DATA = {'channel': 'Web','merchantAccount': 'AdyenRecruitmentCOM'}
 
 # Set your X-API-KEY with the API key from the Customer Area.
 def adyen_payment_methods():
-    result = requests.post(URL, headers=HEADERS, json=DATA)
-    data = json.dumps(result.json())
-    print("/paymentMethods response:\n" + data)
-    return data
+    print("/paymentMethods request:\n" + str(DATA))
+    response = requests.post(URL, headers=HEADERS, json=DATA)
+    formatted_response = json.dumps(response.json())
+    print("/paymentMethods response:\n" + formatted_response)
+    return formatted_response
 
 
 
